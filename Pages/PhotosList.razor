@@ -1,0 +1,64 @@
+@page "/photos"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>List Photos</PageTitle>
+
+<h1>Photos</h1>
+
+<p>This component demonstrates fetching data Photos from the server.</p>
+
+@if (photos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Photo</th>
+                <th>Name</th>
+                <th>Url</th>
+                <th>Thumbnail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in photos)
+            {
+                <tr>
+                    <td>@i.id</td>
+                    <td>@i.title</td>
+                    <td>
+                        <NavLink class="btn btn-primary" href='@(i.url)'>Url</NavLink>
+                    </td>
+                    <td> <NavLink class="btn btn-info" href='@(i.thumbnailUrl)'>Thumbnail</NavLink></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Photos[]? photos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        photos = await Http.GetFromJsonAsync<Photos[]>("https://jsonplaceholder.typicode.com/photos");
+    }
+
+    public class Photos
+    {
+        public int id { get; set; }
+
+        public string title { get; set; }
+
+        public string url { get; set; }
+
+        public string thumbnailUrl { get; set; }
+
+
+    }
+}

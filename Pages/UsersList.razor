@@ -1,0 +1,76 @@
+@page "/users"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>List Users</PageTitle>
+
+<h1>Users</h1>
+
+<p>This component demonstrates fetching data Users from the server.</p>
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID User</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Address</th>
+                <th>email</th>
+                <th>Phone</th>
+                <th>Website</th>
+                <th>Company</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in users)
+            {
+                <tr>
+                    <td>@i.id</td>
+                    <td>@i.name</td>
+                    <td>@i.username</td>
+                    <td>@i.street</td>
+                    <td>@i.email</td>
+                    <td>@i.phone</td>
+                    <td>@i.website</td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Users[]? users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<Users[]>("https://jsonplaceholder.typicode.com/users");
+    }
+
+    public class Users
+    {
+        public int id { get; set; }
+
+        public string name { get; set; }
+
+        public string username { get; set; }
+
+        public string email { get; set; }
+
+        public string street { get; set; }
+
+       // public string company {get; set;}
+
+        public string phone {get; set;}
+
+        public string website {get; set;}
+    }
+}

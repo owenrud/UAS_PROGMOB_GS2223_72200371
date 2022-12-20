@@ -1,0 +1,62 @@
+@page "/comments"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>List Comments</PageTitle>
+
+<h1>Comments</h1>
+
+<p>This component demonstrates fetching data Comments from the server.</p>
+
+@if (comments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Comments</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Body</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in comments)
+            {
+                <tr>
+                    <td>@i.id</td>
+                    <td>@i.name</td>
+                    <td>@i.email</td>
+                    <td>@i.body</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Comments[]? comments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        comments = await Http.GetFromJsonAsync<Comments[]>("https://jsonplaceholder.typicode.com/comments");
+    }
+
+    public class Comments
+    {
+        public int id { get; set; }
+
+        public string name { get; set; }
+
+        public string email { get; set; }
+
+        public string body { get; set; }
+
+
+    }
+}

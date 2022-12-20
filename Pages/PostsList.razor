@@ -1,0 +1,58 @@
+@page "/posts"
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager UriHelper
+
+<PageTitle>List Posts</PageTitle>
+
+<h1>Posts SI UKDW</h1>
+
+<p>This component demonstrates fetching data Posts from the server.</p>
+
+@if (posts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Posts</th>
+                <th>Title</th>
+                <th>Body</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in posts)
+            {
+                <tr>
+                    <td>@i.id</td>
+                    <td>@i.title</td>
+                    <td>@i.body</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Posts[]? posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await Http.GetFromJsonAsync<Posts[]>("https://jsonplaceholder.typicode.com/posts");
+    }
+
+    public class Posts
+    {
+        public int id { get; set; }
+
+        public string title { get; set; }
+
+        public string body { get; set; }
+
+
+    }
+}
